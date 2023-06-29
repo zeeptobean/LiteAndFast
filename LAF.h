@@ -112,6 +112,23 @@ namespace LAF
             }
             _dat[++_last_ptr] = value;
         }
+        template<typename... Args>
+        void emplace_back(Args&&... args)
+        {
+            if (!_size)
+            {
+                _size = 1;
+                _dat = new T[1];
+            } else if (_last_ptr == _size - 1)
+            {
+                _size *= 2;
+                T* old = _dat;
+                _dat = new T[_size];
+                memmove(_dat,old,sizeof(T) * (_size/2));
+                delete[]old;
+            }
+            _dat[++_last_ptr] = T(std::forward<Args>(args)...);
+        }
 
     };
 
