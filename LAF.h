@@ -8,6 +8,7 @@ namespace LAF
         int _size = 0;
         int _last_ptr = -1;
         public:
+        int newArrayScalingFactor = 2;
         T& operator[](int idx)
         {
             if (idx >= 0)
@@ -104,10 +105,10 @@ namespace LAF
                 _dat = new T[1];
             } else if (_last_ptr == _size - 1)
             {
-                _size *= 2;
+                _size *= newArrayScalingFactor;
                 T* old = _dat;
                 _dat = new T[_size];
-                memmove(_dat,old,sizeof(T) * (_size/2));
+                memmove(_dat,old,sizeof(T) * (_size/newArrayScalingFactor));
                 delete[]old;
             }
             _dat[++_last_ptr] = value;
