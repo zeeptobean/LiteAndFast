@@ -5,35 +5,49 @@ namespace LAF
     {
         private:
         T * _dat;
-        int _size = 0;
-        int _last_ptr = -1;
-        public:
-        int newArrayScalingFactor = 2;
-        T& operator[](int idx)
-        {
-            if (idx >= 0)
-                return _dat[idx];
-            return _dat[_last_ptr + idx + 1];
-        }
-        const T& operator[](int idx) const
-        {
-            if (idx >= 0)
-                return _dat[idx];
-            return _dat[_last_ptr + idx + 1];
-        }
-        const int size() const
-        {
-            return _last_ptr + 1;
+        int _size = 1;          //max size
+        int _last_ptr = 0;     //actual size
+        int _scaling_factor = 2;
+
+        constexpr void _alloc_mem() {
+            T* _old = _dat;
+            int _old_size = _size;
+
+            _size *= _scaling_factor;
+            _dat = new T[_size];
+            memmove(_dat, _old, (size_t) sizeof(T)*_old_size);
+            delete[] _old;
         }
 
-        T* begin()
+        public:
+        //factor must be between 2 to 10!
+        constexpr void set_scaling_factor(int factor) {
+            if(factor < 2 || factor > 10) throw std::invalid_argument("set_scaling_factor need a number between 2 to 10!");
+            _scaling_factor = factor;
+        }
+
+        //Out-of-bound access is the user's responsibility
+        constexpr T& operator[](int idx)
+        {
+            return _dat[idx];
+        }
+        constexpr const T& operator[](int idx) const
+        {
+            return _dat[idx];
+        }
+        constexpr int size() const
+        {
+            return _last_ptr;
+        }
+
+        constexpr T* begin()
         {
             return _dat;
         }
 
-        T* end()
+        constexpr T* end()
         {
-            return _dat + _last_ptr + 1;
+            return _dat + _last_ptr;
         }
 
         ~Vector()
@@ -41,36 +55,36 @@ namespace LAF
             delete[]_dat;
         }
 
-        Vector()
+        constexpr Vector()
         {
-            _last_ptr = -1;
+            _last_ptr = 0;
         }
 
-        Vector(std::initializer_list<T> ls)
+        constexpr Vector(std::initializer_list<T> ls)
         {
             _dat = new T[ls.size()];
             memmove(_dat,ls.begin(),sizeof(T) * ls.size());
             _size = ls.size();
-            _last_ptr = ls.size() - 1;
+            _last_ptr = ls.size();
         }
 
-        Vector(int Size, T (*func)(int idx))
+        constexpr Vector(int Size, T (*func)(int idx))
         {
             _dat = new T[Size];
             _size = Size;
-            _last_ptr = _size - 1;
+            _last_ptr = _size;
             for (int i = 0; i < Size;i++)
             {
                 _dat[i] = func(i);
             }
         }
         template<class it>
-        Vector(it beg, it en)
+        constexpr Vector(it beg, it en)
         {
             int Size = std::distance(beg,en);
             _size = Size;
             _dat = new T[_size];
-            _last_ptr = _size - 1;
+            _last_ptr = _size;
             int idx = 0;
             while (beg != en)
             {
@@ -79,56 +93,41 @@ namespace LAF
             }
         }
 
-        void fake_clear()
+        constexpr void fake_clear()
         {
-            _last_ptr = -1;
+            _last_ptr = 0;
         }
 
-        void clear()
+        constexpr void clear()
         {
-            _last_ptr = -1;
+            _last_ptr = 0;
             delete[] _dat;
-            _size = 0;
+            _size = 1;
         }
 
-        void init(int Size)
+        constexpr void init(int Size)
         {
             _dat = new T[Size];
             _size=Size;
+            _last_ptr=0;
         }
 
-        void push_back(const T &value)
+        constexpr void push_back(const T &value)
         {
-            if (!_size)
+            if (_last_ptr == _size)
             {
-                _size = 1;
-                _dat = new T[1];
-            } else if (_last_ptr == _size - 1)
-            {
-                _size *= newArrayScalingFactor;
-                T* old = _dat;
-                _dat = new T[_size];
-                memmove(_dat,old,sizeof(T) * (_size/newArrayScalingFactor));
-                delete[]old;
+                _alloc_mem();
             }
-            _dat[++_last_ptr] = value;
+            _dat[_last_ptr++] = value;
         }
         template<typename... Args>
-        void emplace_back(Args&&... args)
+        constexpr void emplace_back(Args&&... args)
         {
-            if (!_size)
+            if (_last_ptr == _size)
             {
-                _size = 1;
-                _dat = new T[1];
-            } else if (_last_ptr == _size - 1)
-            {
-                _size *= 2;
-                T* old = _dat;
-                _dat = new T[_size];
-                memmove(_dat,old,sizeof(T) * (_size/2));
-                delete[]old;
+                _alloc_mem();
             }
-            _dat[++_last_ptr] = T(std::forward<Args>(args)...);
+            _dat[_last_ptr++] = T(std::forward<Args>(args)...);
         }
 
     };
@@ -136,7 +135,7 @@ namespace LAF
 
 
     template<typename T>
-    std::ostream& operator<< (std::ostream& out, const Vector<T>& arr)
+    constexpr std::ostream& operator<< (std::ostream& out, const Vector<T>& arr)
     {
         out << "[ ";
 
@@ -145,6 +144,7 @@ namespace LAF
             out << arr[i] << " ";
         }
         out << "]";
+        return out;
     }
 
 
