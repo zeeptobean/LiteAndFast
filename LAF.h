@@ -26,6 +26,129 @@ namespace LAF
             _scaling_factor = factor;
         }
 
+        constexpr T& at(int idx)
+        {
+            
+        }
+        constexpr const T& at(int idx) const
+        {
+            
+        }
+
+        constexpr T& front()
+        {
+            
+        }
+        constexpr const T& front() const
+        {
+            
+        }
+
+        constexpr T& back()
+        {
+            
+        }
+        constexpr const T& back() const
+        {
+            
+        }
+
+        constexpr T* data() noexcept
+        {
+
+        }
+        constexpr const T* data() const noexcept
+        {
+            
+        }
+
+        //lots of const ite
+
+        constexpr const T* begin() const noexcept
+        {
+
+        }
+
+        constexpr const T* cbegin() const noexcept
+        {
+
+        }
+
+        constexpr const T* end() const noexcept
+        {
+
+        }
+
+        constexpr const T* cend() const noexcept
+        {
+
+        }
+
+        //reverse iterators, 
+
+        constexpr T* rbegin()
+        {
+            
+        }
+
+        constexpr const T* rbegin() const noexcept
+        {
+
+        }
+
+        constexpr const T* crbegin() const noexcept
+        {
+
+        }
+
+        constexpr T* rend()
+        {
+            
+        }
+
+        constexpr const T* rend() const noexcept
+        {
+
+        }
+
+        constexpr const T* crend() const noexcept
+        {
+
+        }
+
+        constexpr bool empty() const noexcept 
+        {
+            return false;
+        }
+
+        constexpr T* insert(const T* pos, const T& value)
+        {
+
+        }
+
+        constexpr T* insert(const T* pos, T&& value)
+        {
+
+        }
+
+        constexpr T* insert(const T* pos, int cnt, const T& value)
+        {
+
+        }
+
+        template<class it>
+        constexpr T* insert(const T* pos, it beg, it end)
+        {
+
+        }
+
+        constexpr T* insert(const T* pos, std::initializer_list<T> ls)
+        {
+
+        }
+
+
+
         //Out-of-bound access is the user's responsibility
         constexpr T& operator[](int idx)
         {
@@ -93,11 +216,101 @@ namespace LAF
             }
         }
 
+        constexpr Vector(int cnt, const T& val)
+        {
+
+        }
+
+        constexpr Vector(int cnt)
+        {
+
+        }
+
+        //copy
+        constexpr Vector(const Vector& other)
+        {
+
+        }
+
+        //move
+        constexpr Vector(Vector&& other)
+        {
+
+        }
+
+        constexpr Vector& operator=(const Vector& other)
+        {
+            
+        }
+
+        constexpr Vector& operator=(Vector&& other)
+        {
+                    
+        }
+
+        constexpr Vector& operator=(std::initializer_list<T> ls)
+        {
+                
+        }
+
+        constexpr void assign(int cnt, const T& val)
+        {
+
+        }
+
+        template<class it>
+        constexpr void assign(it beg, it en)
+        {
+
+        }
+
+        constexpr void assign(std::initializer_list<T> ls)
+        {
+            
+        }
+
+        template< class... Args >
+        constexpr T* emplace(const T* pos, Args&&... args)
+        {
+
+        }
+
+        constexpr T* erase(const T* pos)
+        {
+
+        }
+
+        constexpr T* erase(const T* beg, const T* end)
+        {
+
+        }
+
+        constexpr void pop_back()
+        {
+
+        }
+
+        constexpr void resize(int count)
+        {
+
+        }
+
+        constexpr void resize(int count, const T& value)
+        {
+
+        }
+
+        constexpr void swap(Vector& other) noexcept
+        {
+
+        }
+
         constexpr void fake_clear()
         {
             _last_ptr = 0;
         }
 
+        //clear() reset the internal size, which is incorrect according to std::vector 
         constexpr void clear()
         {
             _last_ptr = 0;
@@ -110,6 +323,11 @@ namespace LAF
             _dat = new T[Size];
             _size=Size;
             _last_ptr=0;
+        }
+
+        constexpr void push_back(T &&value)
+        {
+
         }
 
         constexpr void push_back(const T &value)
@@ -148,4 +366,46 @@ namespace LAF
     }
 
 
+}
+
+template<class T>
+constexpr void swap(LAF::Vector<T>& lhs, LAF::Vector<T>& rhs)
+{
+
+}
+
+template<class T>
+constexpr bool operator==(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    return false;
+}
+
+template<class T>
+bool operator<(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    
+}
+
+template<class T>
+bool operator>(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    
+}
+
+template<class T>
+bool operator>=(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    
+}
+
+template<class T>
+bool operator<=(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    
+}
+
+template<class T>
+bool operator!=(const LAF::Vector<T>& lhs, const LAF::Vector<T>& rhs)
+{
+    
 }
