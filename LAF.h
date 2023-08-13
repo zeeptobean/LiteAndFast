@@ -305,6 +305,9 @@ namespace LAF
 
         }
 
+
+fjhsdjkfsdjfsdjf
+
         constexpr void fake_clear()
         {
             _last_ptr = 0;
